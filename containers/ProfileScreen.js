@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import axios from "axios";
@@ -20,14 +21,119 @@ export default function ProfileScreen({
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [description, setDescription] = useState("");
+    const [urlImage, setUrlImage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [requestInProgress, setRequestInProgress] = useState(false); //msgjs21 Gérer
-    console.log("deb ProfileScreen");
+    const [isImageModified, setIsImageModified] = useState(false);
+
+    console.log("deb ProfileScreen keyb");
 
     const handleLogOutButton = () => {
         setIdAndToken(null);
     };
-    const handleUpdateButton = () => {};
+
+    const uploadPicture = async () => {
+        const cameraRollPerm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (cameraRollPerm.status === "granted") {
+            const pickerResult = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3],
+            });
+
+            if (pickerResult && pickerResult.uri) {
+                setUrlImage(pickerResult.uri);
+
+                if (!isImageModified) {
+                    setIsImageModified(true);
+                }
+            }
+
+            /*
+=> Object {
+  "cancelled": false,
+  "height": 2250,
+  "type": "image",
+  "uri": "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FAirbnb+J%25C3%25A9r%25C3%25B4me-79f923a5-a607-43cf-ad11-a0f075e04176/ImagePicker/970f9884-c296-4a32-9ae2-2416b8090b32.jpg", 
+  "width": 3000,
+}
+*/
+        }
+    };
+
+    const takePicture = async () => {
+        const cameraPerm = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (cameraPerm.status !== "granted") {
+            return;
+        }
+        const cameraRollPerm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (cameraRollPerm.status !== "granted") {
+            return;
+        }
+
+        const pickerResult = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        if (pickerResult && pickerResult.uri) {
+            setUrlImage(pickerResult.uri);
+            if (!isImageModified) {
+                setIsImageModified(true);
+            }
+        }
+    };
+
+    const handleUpdateButton = () => {
+        if (isImageModified) {
+            updateImage();
+        }
+    };
+
+    const updateImage = async () => {
+        try {
+            let imageExtension = "";
+
+            if (urlImage.indexOf(".") >= 0) {
+                const partsOfImageUrl = urlImage.split(".");
+                imageExtension = partsOfImageUrl[partsOfImageUrl.length - 1];
+            }
+            const formData = new FormData();
+            formData.append("photo", {
+                uri: urlImage,
+                name: username,
+                type: `image/${imageExtension}`,
+            });
+            const response = await axios.put(
+                `https://express-airbnb-api.herokuapp.com/user/upload_picture`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${userIdAndToken.token}`,
+                    },
+                }
+            );
+
+            if (response.data) {
+                console.log("response.data:", response.data);
+                setUrlImage(response.data.photo[0].url);
+                setIsImageModified(false);
+                //Msgjs21 AffMsgOK
+            }
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error
+            ) {
+                setErrorMessage(error.response.data.error);
+            } else {
+                //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
+                console.log("An error occured:", error);
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +149,9 @@ export default function ProfileScreen({
                 setEmail(response.data.email);
                 setUsername(response.data.username);
                 setDescription(response.data.description);
+                if (response.data.photo && response.data.photo.url) {
+                    setUrlImage(response.data.photo.url);
+                }
 
                 setIsDownloading(false);
             } catch (error) {
@@ -56,7 +165,13 @@ export default function ProfileScreen({
     /*
 <View style={[styles.container, styles.contentContainerStyle]}>
 </View>
-*/
+<KeyboardAwareScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainerStyle}
+        >
+        </KeyboardAwareScrollView>
+<ErrorMessage errorMessage={errorMessage} />
+        */
 
     return (
         <KeyboardAwareScrollView
@@ -65,7 +180,17 @@ export default function ProfileScreen({
         >
             <View style={styles.topView}>
                 <TouchableOpacity style={styles.aroundUserImage}>
-                    <Image style={styles.userImage} source={unknownUserImage} />
+                    {urlImage ? (
+                        <Image
+                            style={styles.userImage}
+                            source={{ uri: urlImage }}
+                        />
+                    ) : (
+                        <Image
+                            style={styles.userImage}
+                            source={unknownUserImage}
+                        />
+                    )}
                 </TouchableOpacity>
                 <View style={styles.chooseOrTakePhoto}>
                     <TouchableOpacity
@@ -117,7 +242,6 @@ export default function ProfileScreen({
 
             <View style={styles.bottomView}>
                 {/* <ErrorMessage errorMessage={errorMessage} /> */}
-
                 <ConnectionButton
                     text="Update"
                     requestInProgress={requestInProgress}
@@ -139,7 +263,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         flex: 1,
         paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. msgjs21 Mais
-        //sous iOs, le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
+        //le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
     },
     contentContainerStyle: {
         justifyContent: "space-around",
