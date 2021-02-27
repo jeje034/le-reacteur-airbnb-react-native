@@ -28,7 +28,7 @@ import OneLineInput from "../components/OneLineInput";
 import ConnectionButton from "../components/ConnectionButton";
 import RedirectLink from "../components/RedirectLink";
 import MultipleActivityIndicator from "../components/MultipleActivityIndicator";
-import ErrorMessage from "../components/ErrorMessage";
+import ErrorOrInformationMessage from "../components/ErrorOrInformationMessage";
 import MultiLineInput from "../components/MultiLineInput";
 
 export default function SignUpScreen({ setIdAndToken }) {
@@ -149,7 +149,9 @@ export default function SignUpScreen({ setIdAndToken }) {
                     <View style={styles.bottomView}>
                         {requestInProgress && <MultipleActivityIndicator />}
 
-                        <ErrorMessage errorMessage={errorMessage} />
+                        <ErrorOrInformationMessage
+                            message={{ message: errorMessage, type: "error" }}
+                        />
 
                         <ConnectionButton
                             text="Sign up"

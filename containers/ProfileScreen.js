@@ -11,6 +11,7 @@ import colors from "../assets/colors";
 import OneLineInput from "../components/OneLineInput";
 import MultiLineInput from "../components/MultiLineInput";
 import ConnectionButton from "../components/ConnectionButton";
+import ErrorOrInformationMessage from "../components/ErrorOrInformationMessage";
 
 export default function ProfileScreen({
     userIdAndToken,
@@ -22,7 +23,9 @@ export default function ProfileScreen({
     const [username, setUsername] = useState("");
     const [description, setDescription] = useState("");
     const [urlImage, setUrlImage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorOrInformationMessage, setErrorOrInformationMessage] = useState(
+        {}
+    );
     const [requestInProgress, setRequestInProgress] = useState(false); //msgjs21 Gérer
     const [isImageModified, setIsImageModified] = useState(false);
     const [isTextModified, setIsTextModified] = useState(false);
@@ -34,6 +37,7 @@ export default function ProfileScreen({
     };
 
     const uploadPicture = async () => {
+        setErrorOrInformationMessage("");
         const cameraRollPerm = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (cameraRollPerm.status === "granted") {
@@ -63,6 +67,7 @@ export default function ProfileScreen({
     };
 
     const takePicture = async () => {
+        setErrorOrInformationMessage("");
         const cameraPerm = await ImagePicker.requestCameraPermissionsAsync();
 
         if (cameraPerm.status !== "granted") {
@@ -87,16 +92,40 @@ export default function ProfileScreen({
     };
 
     const handleUpdateButton = () => {
+        let updateKo = false;
+        let textUpdated = false;
+        let imageUpdated = false;
         if (isImageModified) {
-            updateImage();
+            if (!updateImage()) {
+                updateKo = true;
+            } else {
+                imageUpdated = true;
+            }
         }
 
         if (isTextModified) {
-            updateText();
+            if (!updateText()) {
+                updateKo = true;
+            } else {
+                textUpdated = true;
+            }
+        }
+
+        if (!updateKo) {
+            setErrorOrInformationMessage({
+                message:
+                    imageUpdated && !textUpdated
+                        ? "Image updated"
+                        : imageUpdated && textUpdated
+                        ? "Informations updated"
+                        : "Information(s) updated",
+                type: "information",
+            });
         }
     };
 
     const updateImage = async () => {
+        let updateOK = false;
         try {
             let imageExtension = "";
 
@@ -124,7 +153,7 @@ export default function ProfileScreen({
                 console.log("response.data:", response.data);
                 setUrlImage(response.data.photo[0].url);
                 setIsImageModified(false);
-                //Msgjs21 AffMsgOK
+                updateOK = true;
             }
         } catch (error) {
             if (
@@ -132,15 +161,19 @@ export default function ProfileScreen({
                 error.response.data &&
                 error.response.data.error
             ) {
-                setErrorMessage(error.response.data.error);
+                setErrorOrInformationMessage({
+                    message: error.response.data.error,
+                });
             } else {
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
                 console.log("An error occured during image update:", error);
             }
         }
+        return updateOK;
     };
 
     const updateText = async () => {
+        let updateOK = false;
         try {
             const sentObject = {
                 email,
@@ -160,7 +193,7 @@ export default function ProfileScreen({
             if (response.data) {
                 console.log("response.data:", response.data);
                 setIsTextModified(false);
-                //Msgjs21 AffMsgOK
+                updateOK = true;
             }
         } catch (error) {
             if (
@@ -168,7 +201,9 @@ export default function ProfileScreen({
                 error.response.data &&
                 error.response.data.error
             ) {
-                setErrorMessage(error.response.data.error);
+                setErrorOrInformationMessage({
+                    message: error.response.data.error,
+                });
                 console.log(
                     "An error occured during text update:",
                     error.response.data.error
@@ -178,6 +213,8 @@ export default function ProfileScreen({
                 console.log("An error occured during text update :", error);
             }
         }
+
+        return updateOK;
     };
 
     useEffect(() => {
@@ -210,7 +247,10 @@ export default function ProfileScreen({
                 setIsDownloading(false);
             } catch (error) {
                 console.log("An error occured :", error.message);
-                alert("An error occurs."); //msgjs21 si temps metre un <Text> en rouge
+
+                setErrorOrInformationMessage({
+                    message: "An error occurs.",
+                });
             }
         };
         fetchData();
@@ -224,7 +264,6 @@ export default function ProfileScreen({
             contentContainerStyle={styles.contentContainerStyle}
         >
         </KeyboardAwareScrollView>
-<ErrorMessage errorMessage={errorMessage} />
         */
 
     return (
@@ -277,7 +316,7 @@ export default function ProfileScreen({
                     placeHolder="email"
                     setValueFunction={setEmail}
                     value={email}
-                    setErrorMessageFunction={setErrorMessage}
+                    setErrorMessageFunction={setErrorOrInformationMessage}
                     keyboardType="email-address"
                     setIsModifiedFunction={setIsTextModified}
                 />
@@ -285,20 +324,24 @@ export default function ProfileScreen({
                     placeHolder="username"
                     setValueFunction={setUsername}
                     value={username}
-                    setErrorMessageFunction={setErrorMessage}
+                    setErrorMessageFunction={setErrorOrInformationMessage}
                     setIsModifiedFunction={setIsTextModified}
                 />
                 <MultiLineInput
                     placeHolder="Describe yourself in a few words..."
                     setValueFunction={setDescription}
                     value={description}
-                    setErrorMessageFunction={setErrorMessage}
+                    setErrorMessageFunction={setErrorOrInformationMessage}
                     setIsModifiedFunction={setIsTextModified}
                 />
             </View>
 
             <View style={styles.bottomView}>
-                {/* <ErrorMessage errorMessage={errorMessage} /> */}
+                {
+                    <ErrorOrInformationMessage
+                        message={errorOrInformationMessage}
+                    />
+                }
                 <ConnectionButton
                     text="Update"
                     requestInProgress={requestInProgress}

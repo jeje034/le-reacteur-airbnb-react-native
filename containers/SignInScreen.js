@@ -27,7 +27,7 @@ import OneLineInput from "../components/OneLineInput";
 import ConnectionButton from "../components/ConnectionButton";
 import RedirectLink from "../components/RedirectLink";
 import MultipleActivityIndicator from "../components/MultipleActivityIndicator";
-import ErrorMessage from "../components/ErrorMessage";
+import ErrorOrInformationMessage from "../components/ErrorOrInformationMessage";
 
 export default function SignInScreen({ setIdAndToken }) {
     const [email, setEmail] = useState("");
@@ -102,7 +102,9 @@ export default function SignInScreen({ setIdAndToken }) {
                     <View style={styles.bottomView}>
                         {requestInProgress && <MultipleActivityIndicator />}
 
-                        <ErrorMessage errorMessage={errorMessage} />
+                        <ErrorOrInformationMessage
+                            message={{ message: errorMessage, type: "error" }}
+                        />
 
                         <ConnectionButton
                             text="Sign in"
