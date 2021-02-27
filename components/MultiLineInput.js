@@ -9,6 +9,7 @@ const MultiLineInput = ({
     setValueFunction,
     setErrorMessageFunction,
     value,
+    setIsModifiedFunction,
 }) => {
     /*
         <View style={styles.aroundInput}>
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
             onChangeText={(text) => {
                 setValueFunction(text);
                 setErrorMessageFunction("");
+                setIsModifiedFunction && setIsModifiedFunction(true);
             }}
         />
     );

@@ -25,6 +25,7 @@ export default function ProfileScreen({
     const [errorMessage, setErrorMessage] = useState("");
     const [requestInProgress, setRequestInProgress] = useState(false); //msgjs21 Gérer
     const [isImageModified, setIsImageModified] = useState(false);
+    const [isTextModified, setIsTextModified] = useState(false);
 
     console.log("deb ProfileScreen keyb");
 
@@ -89,6 +90,10 @@ export default function ProfileScreen({
         if (isImageModified) {
             updateImage();
         }
+
+        if (isTextModified) {
+            updateText();
+        }
     };
 
     const updateImage = async () => {
@@ -130,7 +135,47 @@ export default function ProfileScreen({
                 setErrorMessage(error.response.data.error);
             } else {
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
-                console.log("An error occured:", error);
+                console.log("An error occured during image update:", error);
+            }
+        }
+    };
+
+    const updateText = async () => {
+        try {
+            const sentObject = {
+                email,
+                username,
+                description,
+            };
+            const response = await axios.put(
+                "https://express-airbnb-api.herokuapp.com/user/update",
+                sentObject,
+                {
+                    headers: {
+                        Authorization: `Bearer ${userIdAndToken.token}`,
+                    },
+                }
+            );
+
+            if (response.data) {
+                console.log("response.data:", response.data);
+                setIsTextModified(false);
+                //Msgjs21 AffMsgOK
+            }
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error
+            ) {
+                setErrorMessage(error.response.data.error);
+                console.log(
+                    "An error occured during text update:",
+                    error.response.data.error
+                );
+            } else {
+                //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
+                console.log("An error occured during text update :", error);
             }
         }
     };
@@ -149,8 +194,17 @@ export default function ProfileScreen({
                 setEmail(response.data.email);
                 setUsername(response.data.username);
                 setDescription(response.data.description);
-                if (response.data.photo && response.data.photo.url) {
-                    setUrlImage(response.data.photo.url);
+
+                if (
+                    response.data.photo &&
+                    response.data.photo &&
+                    response.data.photo[0] &&
+                    response.data.photo[0].url
+                ) {
+                    console.log("User has image:", response.data.photo[0].url);
+                    setUrlImage(response.data.photo[0].url);
+                } else {
+                    console.log("User without image.");
                 }
 
                 setIsDownloading(false);
@@ -179,7 +233,7 @@ export default function ProfileScreen({
             contentContainerStyle={styles.contentContainerStyle}
         >
             <View style={styles.topView}>
-                <TouchableOpacity style={styles.aroundUserImage}>
+                <View style={styles.aroundUserImage}>
                     {urlImage ? (
                         <Image
                             style={styles.userImage}
@@ -191,7 +245,7 @@ export default function ProfileScreen({
                             source={unknownUserImage}
                         />
                     )}
-                </TouchableOpacity>
+                </View>
                 <View style={styles.chooseOrTakePhoto}>
                     <TouchableOpacity
                         onPress={() => {
@@ -225,18 +279,21 @@ export default function ProfileScreen({
                     value={email}
                     setErrorMessageFunction={setErrorMessage}
                     keyboardType="email-address"
+                    setIsModifiedFunction={setIsTextModified}
                 />
                 <OneLineInput
                     placeHolder="username"
                     setValueFunction={setUsername}
                     value={username}
                     setErrorMessageFunction={setErrorMessage}
+                    setIsModifiedFunction={setIsTextModified}
                 />
                 <MultiLineInput
                     placeHolder="Describe yourself in a few words..."
                     setValueFunction={setDescription}
                     value={description}
                     setErrorMessageFunction={setErrorMessage}
+                    setIsModifiedFunction={setIsTextModified}
                 />
             </View>
 

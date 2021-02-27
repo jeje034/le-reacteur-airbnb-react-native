@@ -12,6 +12,7 @@ const OneLineInput = ({
     setPasswordHidden,
     value,
     keyboardType,
+    setIsModifiedFunction,
 }) => {
     return (
         <View style={styles.aroundInput}>
@@ -27,6 +28,7 @@ const OneLineInput = ({
                 onChangeText={(text) => {
                     setValueFunction(text);
                     setErrorMessageFunction("");
+                    setIsModifiedFunction && setIsModifiedFunction(true);
                 }}
             />
             {setPasswordHidden && (
