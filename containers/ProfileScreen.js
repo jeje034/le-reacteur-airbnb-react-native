@@ -42,7 +42,7 @@ export default function ProfileScreen({
         if (cameraRollPerm.status === "granted") {
             const pickerResult = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                aspect: [4, 3],
+                aspect: [1, 1],
             });
 
             if (pickerResult && pickerResult.uri) {
@@ -170,7 +170,6 @@ export default function ProfileScreen({
             if (response.data) {
                 console.log("response.data:", response.data);
                 setIsTextModified(false);
-                updateOK = true;
                 setErrorOrInformationMessage({
                     message: "Information(s) updated",
                     type: "information",

@@ -110,7 +110,7 @@ export default function SignUpScreen({ setIdAndToken }) {
                 <View style={styles.globalView}>
                     <View style={styles.topView}>
                         <LogoAirbnb largeLogo={true} />
-                        <MainTitle title="Sign in" />
+                        <MainTitle title="Sign up" />
                     </View>
 
                     <View style={styles.mediumView}>
