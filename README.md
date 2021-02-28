@@ -2,18 +2,44 @@
 	Airbnb Clone - React Native
 </h1>
 
-## Apperçu
+## Aperçu
 
-**Clone de l'application Airbnb réalisé peandant une formation à React Native.**  
-6 écrans sont disponibles : Login, Signup, Home, Room, Around Me et My profile.
+**Clone de l'application Airbnb réalisé peandant une formation à React Native.**
 
 Fonctionne sur iOS et Android.
+
+6 écrans sont disponibles : Login, Signup, Home, Room, Around Me et My profile.
 
 ## Copie d'écrans
 
 <img
 		width="210"
 		alt="Capture 1"
+		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_SignUp.png">
+
+<img
+		width="210"
+		alt="Capture 2"
+		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_Home.png">
+
+<img
+		width="210"
+		alt="Capture 3"
+		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_Room.png">
+
+<img
+		width="210"
+		alt="Capture 4"
+		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_AroudMe.png">
+
+<img
+		width="210"
+		alt="Capture 5"
+		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_MyProfile.png">
+
+<img
+		width="210"
+		alt="Capture 6"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_SignIn.png">
 
 ## Packages
