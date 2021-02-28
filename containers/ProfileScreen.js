@@ -33,7 +33,10 @@ export default function ProfileScreen({
     console.log("deb ProfileScreen keyb");
 
     const handleLogOutButton = () => {
+        console.log("deb handleLogOutButton");
         setIdAndToken(null);
+        setRequestInProgress(false);
+        console.log("fin handleLogOutButton");
     };
 
     const uploadPicture = async () => {
@@ -92,40 +95,19 @@ export default function ProfileScreen({
     };
 
     const handleUpdateButton = () => {
-        let updateKo = false;
-        let textUpdated = false;
-        let imageUpdated = false;
+        console.log("deb handleUpdateButton");
         if (isImageModified) {
-            if (!updateImage()) {
-                updateKo = true;
-            } else {
-                imageUpdated = true;
-            }
+            updateImage();
         }
 
         if (isTextModified) {
-            if (!updateText()) {
-                updateKo = true;
-            } else {
-                textUpdated = true;
-            }
+            updateText();
         }
 
-        if (!updateKo) {
-            setErrorOrInformationMessage({
-                message:
-                    imageUpdated && !textUpdated
-                        ? "Image updated"
-                        : imageUpdated && textUpdated
-                        ? "Informations updated"
-                        : "Information(s) updated",
-                type: "information",
-            });
-        }
+        console.log("fin handleUpdateButton");
     };
 
     const updateImage = async () => {
-        let updateOK = false;
         try {
             let imageExtension = "";
 
@@ -153,8 +135,13 @@ export default function ProfileScreen({
                 console.log("response.data:", response.data);
                 setUrlImage(response.data.photo[0].url);
                 setIsImageModified(false);
-                updateOK = true;
+
+                setErrorOrInformationMessage({
+                    message: "Image updated",
+                    type: "information",
+                });
             }
+            setRequestInProgress(false);
         } catch (error) {
             if (
                 error.response &&
@@ -168,12 +155,11 @@ export default function ProfileScreen({
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
                 console.log("An error occured during image update:", error);
             }
+            setRequestInProgress(false);
         }
-        return updateOK;
     };
 
     const updateText = async () => {
-        let updateOK = false;
         try {
             const sentObject = {
                 email,
@@ -194,7 +180,12 @@ export default function ProfileScreen({
                 console.log("response.data:", response.data);
                 setIsTextModified(false);
                 updateOK = true;
+                setErrorOrInformationMessage({
+                    message: "Information(s) updated",
+                    type: "information",
+                });
             }
+            setRequestInProgress(false);
         } catch (error) {
             if (
                 error.response &&
@@ -212,9 +203,8 @@ export default function ProfileScreen({
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
                 console.log("An error occured during text update :", error);
             }
+            setRequestInProgress(false);
         }
-
-        return updateOK;
     };
 
     useEffect(() => {
