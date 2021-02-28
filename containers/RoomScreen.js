@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+    Dimensions,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import MapView from "react-native-maps";
 import axios from "axios";
 
@@ -44,7 +51,6 @@ export default function RoomScreen({ route }) {
                         imageFullScreen={true}
                         swiperFlatList={true}
                     />
-
                     <Text
                         style={styles.description}
                         numberOfLines={!displayFullText ? 3 : null}
@@ -54,6 +60,35 @@ export default function RoomScreen({ route }) {
                     >
                         {room.description}
                     </Text>
+                    {Dimensions.get("window").height >= 720 && (
+                        <TouchableOpacity
+                            onPress={() => setDisplayFullText(!displayFullText)}
+                        >
+                            {displayFullText ? (
+                                <View style={styles.expand}>
+                                    <Text style={styles.expandBis}>
+                                        Show less
+                                    </Text>
+                                    <MaterialIcons
+                                        name="expand-less"
+                                        size={16}
+                                        color="grey"
+                                    />
+                                </View>
+                            ) : (
+                                <View style={styles.expand}>
+                                    <Text style={styles.expandBis}>
+                                        Show more
+                                    </Text>
+                                    <MaterialIcons
+                                        name="expand-more"
+                                        size={16}
+                                        color="grey"
+                                    />
+                                </View>
+                            )}
+                        </TouchableOpacity>
+                    )}
                     <MapView
                         // La MapView doit obligatoirement avoir des dimensions
                         style={{ flex: 1 }}
@@ -93,5 +128,13 @@ const styles = StyleSheet.create({
     description: {
         marginHorizontal: 20,
         marginBottom: 20,
+    },
+    expand: {
+        flexDirection: "row",
+        marginBottom: 20,
+    },
+    expandBis: {
+        color: "grey",
+        marginLeft: 20,
     },
 });
