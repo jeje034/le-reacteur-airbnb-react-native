@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderWidth: 1,
-        borderBottomColor: colors.lightRed,
+        borderColor: colors.lightRed,
     },
     userImage: {
         height: 150,
