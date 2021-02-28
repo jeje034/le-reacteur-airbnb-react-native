@@ -21,22 +21,18 @@ Fonctionne sur iOS et Android.
 		width="210"
 		alt="Capture 2"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_Home.png">
-
 <img
 		width="210"
 		alt="Capture 3"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_Room.png">
-
 <img
 		width="210"
 		alt="Capture 4"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_AroudMe.png">
-
 <img
 		width="210"
 		alt="Capture 5"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_MyProfile.png">
-
 <img
 		width="210"
 		alt="Capture 6"
