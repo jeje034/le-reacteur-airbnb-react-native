@@ -26,17 +26,13 @@ export default function ProfileScreen({
     const [errorOrInformationMessage, setErrorOrInformationMessage] = useState(
         {}
     );
-    const [requestInProgress, setRequestInProgress] = useState(false); //msgjs21 Gérer
     const [isImageModified, setIsImageModified] = useState(false);
     const [isTextModified, setIsTextModified] = useState(false);
 
     console.log("deb ProfileScreen keyb");
 
     const handleLogOutButton = () => {
-        console.log("deb handleLogOutButton");
         setIdAndToken(null);
-        setRequestInProgress(false);
-        console.log("fin handleLogOutButton");
     };
 
     const uploadPicture = async () => {
@@ -95,7 +91,6 @@ export default function ProfileScreen({
     };
 
     const handleUpdateButton = () => {
-        console.log("deb handleUpdateButton");
         if (isImageModified) {
             updateImage();
         }
@@ -103,8 +98,6 @@ export default function ProfileScreen({
         if (isTextModified) {
             updateText();
         }
-
-        console.log("fin handleUpdateButton");
     };
 
     const updateImage = async () => {
@@ -141,7 +134,6 @@ export default function ProfileScreen({
                     type: "information",
                 });
             }
-            setRequestInProgress(false);
         } catch (error) {
             if (
                 error.response &&
@@ -155,7 +147,6 @@ export default function ProfileScreen({
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
                 console.log("An error occured during image update:", error);
             }
-            setRequestInProgress(false);
         }
     };
 
@@ -185,7 +176,6 @@ export default function ProfileScreen({
                     type: "information",
                 });
             }
-            setRequestInProgress(false);
         } catch (error) {
             if (
                 error.response &&
@@ -203,7 +193,6 @@ export default function ProfileScreen({
                 //dans le cas dune erreur hors axios, on n'aura pas forcémment de error.response
                 console.log("An error occured during text update :", error);
             }
-            setRequestInProgress(false);
         }
     };
 
@@ -334,13 +323,11 @@ export default function ProfileScreen({
                 }
                 <ConnectionButton
                     text="Update"
-                    requestInProgress={requestInProgress}
                     onPressAsyncFunction={handleUpdateButton}
                     marginBottom={20}
                 />
                 <ConnectionButton
                     text="Log out"
-                    requestInProgress={requestInProgress}
                     onPressAsyncFunction={handleLogOutButton}
                 />
             </View>
