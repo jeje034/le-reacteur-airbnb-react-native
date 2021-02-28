@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
-        paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. msgjs21 Mais
+        paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. Mais
         //le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
     },
     contentContainerStyle: {

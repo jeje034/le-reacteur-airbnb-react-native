@@ -55,28 +55,8 @@ export default function App() {
     }, []);
 
     /*
-                                                    drawerIcon: ({
-                                                        focused,
-                                                        size,
-                                                    }) => (
-                                                        <Image
-                                                            source={require("./assets/logo.png")}
-                                                            style={[
-                                                                focused
-                                                                    ? styles.drawerActive
-                                                                    : styles.drawerInActive,
-                                                                {
-                                                                    height: size,
-                                                                    width: size,
-                                                                },
-                                                            ]}
-                                                        />
-                                                    ),
 
-       msgjs21 noter headerTitleAlign="center" pour aligner le logo au centre sur android (il est centré par défaut sur IOS)
-       msgjs21 noter headerTitle au lieu de title pour avoir une immage à la place du titre dans le header
-       Noter aussi les possibilité d'avoir ces options sur un écran ou sur tous les écrans
-*/
+    */
 
     return (
         <NavigationContainer>

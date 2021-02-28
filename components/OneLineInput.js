@@ -18,7 +18,7 @@ const OneLineInput = ({
         <View style={styles.aroundInput}>
             <TextInput
                 placeholder={placeHolder}
-                underlineColorAndroid="transparent" //msgjs21 ne fonctionne pas pendant la saisie sur Android (pas nécessaire sur IOS)
+                underlineColorAndroid="transparent" //Attention, le texte peut être souligné car il est inconnu du dictionnaire !
                 InputProps={{ disableUnderline: true }}
                 style={styles.input}
                 value={value && value}

@@ -12,29 +12,10 @@ const MultiLineInput = ({
     setIsModifiedFunction,
 }) => {
     /*
-        <View style={styles.aroundInput}>
-        </View>
-
-
-
-const styles = StyleSheet.create({
-    aroundInput: {
-        borderColor: colors.lightRed,
-        borderWidth: 1,
-        marginBottom: 20,
-        width: Dimensions.get("window").width - 60,
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
-    input: {
-        height: 100,
-        fontSize: 16,
-    },
-});
-
 
 */
 
+    //Attention, le texte peut être souligné car il est inconnu du dictionnaire !
     return (
         <TextInput
             placeholder={placeHolder}

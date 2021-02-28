@@ -16,7 +16,6 @@ Fonctionne sur iOS et Android.
 		width="210"
 		alt="Capture 1"
 		src="https://github.com/jeje034/le-reacteur-airbnb-react-native/blob/main/assets/Screenshot_SignUp.png">
-
 <img
 		width="210"
 		alt="Capture 2"
