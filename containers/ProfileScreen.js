@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Constants from "expo-constants";
 import axios from "axios";
 
@@ -244,6 +252,63 @@ export default function ProfileScreen({
         </KeyboardAwareScrollView>
         */
 
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: "white",
+            //flex: 1,
+            //paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. Mais
+            //le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
+        },
+        contentContainerStyle: {
+            justifyContent: "space-around",
+            flex: 1,
+            minHeight:
+                Dimensions.get("window").height -
+                Constants.statusBarHeight -
+                useBottomTabBarHeight(), //97,
+        },
+        topView: {
+            flexDirection: "row",
+            justifyContent: "center",
+        },
+        isDownloadingView: {
+            alignItems: "center",
+            justifyContent: "center",
+            flex: 1,
+        },
+        aroundUserImage: {
+            width: 170,
+            height: 170,
+            borderRadius: 85,
+            // width: 85,
+            // height: 85,
+            // borderRadius: 42,
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 1,
+            borderColor: colors.lightRed,
+        },
+        userImage: {
+            height: 150,
+            width: 150,
+            borderRadius: 75,
+            // height: 75,
+            // width: 75,
+            // borderRadius: 37,
+        },
+        chooseOrTakePhoto: {
+            justifyContent: "space-around",
+            marginLeft: 20,
+        },
+        mediumView: {
+            alignItems: "center",
+        },
+        bottomView: {
+            //        marginHorizontal: 20,
+            alignItems: "center",
+        },
+    });
+
     return (
         <KeyboardAwareScrollView
             style={styles.container}
@@ -333,50 +398,3 @@ export default function ProfileScreen({
         </KeyboardAwareScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "white",
-        flex: 1,
-        paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. Mais
-        //le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
-    },
-    contentContainerStyle: {
-        justifyContent: "space-around",
-    },
-
-    topView: {
-        flexDirection: "row",
-        justifyContent: "center",
-    },
-    isDownloadingView: {
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-    },
-    aroundUserImage: {
-        width: 170,
-        height: 170,
-        borderRadius: 85,
-        alignItems: "center",
-        justifyContent: "center",
-        borderWidth: 1,
-        borderColor: colors.lightRed,
-    },
-    userImage: {
-        height: 150,
-        width: 150,
-        borderRadius: 75,
-    },
-    chooseOrTakePhoto: {
-        justifyContent: "space-around",
-        marginLeft: 20,
-    },
-    mediumView: {
-        alignItems: "center",
-    },
-    bottomView: {
-        //        marginHorizontal: 20,
-        alignItems: "center",
-    },
-});
