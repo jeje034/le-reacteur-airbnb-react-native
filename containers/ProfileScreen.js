@@ -243,21 +243,20 @@ export default function ProfileScreen({
     }, []);
 
     /*
-<View style={[styles.container, styles.contentContainerStyle]}>
-</View>
-<KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainerStyle}
-        >
-        </KeyboardAwareScrollView>
-        */
 
+    */
+
+    //J'ai mis cet objet style à l'intérieur de la fonction ProfileScreen pour pouvoir utiliser useBottomTabBarHeight().
+    //Une autre solution aurait été de mettre minHeight directement sur le composant dans un tableau comme ceci :
+    //return (
+    //  <KeyboardAwareScrollView
+    //      style={styles.container}
+    //      contentContainerStyle={[styles.contentContainerStyle,
+    //      {minHeiht: ...},]}
+    //    >
     const styles = StyleSheet.create({
         container: {
             backgroundColor: "white",
-            //flex: 1,
-            //paddingTop: Constants.statusBarHeight, //J'ai dû mettre ce padding dpuis que j'ai mis KeyboardAwareScrollView. Mais
-            //le KeyboardAwareScrollView fait que le le justifyContent: "space-around" de contentContainerStyle ne s'applique pas => issue
         },
         contentContainerStyle: {
             justifyContent: "space-around",
@@ -265,7 +264,7 @@ export default function ProfileScreen({
             minHeight:
                 Dimensions.get("window").height -
                 Constants.statusBarHeight -
-                useBottomTabBarHeight(), //97,
+                useBottomTabBarHeight(),
         },
         topView: {
             flexDirection: "row",
